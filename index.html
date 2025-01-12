@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .photo-container {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .photo-container:hover {
+            transform: scale(1.02);
+        }
+
+        .photo {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .caption {
+            margin-top: 10px;
+            text-align: center;
+            color: #666;
+        }
+
+        /* New styles for lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90vh;
+            position: relative;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+
+        .lightbox-caption {
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 1.2em;
+        }
+
+        .close-button {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+
+        .close-button:hover {
+            color: #ddd;
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>My Photo Gallery</h1>
+
+    <div class="gallery">
+        <!-- Example photos -->
+        <div class="photo-container">
+            <img class="photo" src="https://picsum.photos/500/300?random=1" alt="Nature Photo 1">
+            <p class="caption">Beautiful Landscape</p>
+        </div>
+
+        <div class="photo-container">
+            <img class="photo" src="https://picsum.photos/500/300?random=2" alt="Nature Photo 2">
+            <p class="caption">Mountain View</p>
+        </div>
+
+        <div class="photo-container">
+            <img class="photo" src="https://picsum.photos/500/300?random=3" alt="Nature Photo 3">
+            <p class="caption">Ocean Sunset</p>
+        </div>
+
+        <div class="photo-container">
+            <img class="photo" src="https://picsum.photos/500/300?random=4" alt="Nature Photo 4">
+            <p class="caption">Forest Path</p>
+        </div>
+
+        <div class="photo-container">
+            <img class="photo" src="https://picsum.photos/500/300?random=5" alt="Nature Photo 5">
+            <p class="caption">City Lights</p>
+        </div>
+
+        <div class="photo-container">
+            <img class="photo" src="https://picsum.photos/500/300?random=6" alt="Nature Photo 6">
+            <p class="caption">Desert Scene</p>
+        </div>
+    </div>
+
+    <!-- Lightbox container -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <button class="close-button">&times;</button>
+            <img class="lightbox-image" src="" alt="">
+            <p class="lightbox-caption"></p>
+        </div>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.querySelector('.lightbox-image');
+        const lightboxCaption = document.querySelector('.lightbox-caption');
+        const closeButton = document.querySelector('.close-button');
+        const photoContainers = document.querySelectorAll('.photo-container');
+
+        // Add click event to each photo container
+        photoContainers.forEach(container => {
+            container.addEventListener('click', () => {
+                const img = container.querySelector('.photo');
+                const caption = container.querySelector('.caption');
+                
+                // Set lightbox content
+                lightboxImage.src = img.src;
+                lightboxImage.alt = img.alt;
+                lightboxCaption.textContent = caption.textContent;
+                
+                // Show lightbox
+                lightbox.classList.add('active');
+            });
+        });
+
+        // Close lightbox when clicking close button
+        closeButton.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+
+        // Close lightbox when clicking outside the image
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+            }
+        });
+
+        // Close lightbox with escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                lightbox.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html> 
